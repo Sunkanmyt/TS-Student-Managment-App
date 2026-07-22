@@ -1,16 +1,24 @@
 {
   "name": "class",
   "version": "1.0.0",
-  "description": "An app for managing students in a class",
+  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sunkanmyt/TS-Student-Managment-App.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sunkanmyt/TS-Student-Managment-App/issues"
+  },
+  "homepage": "https://github.com/Sunkanmyt/TS-Student-Managment-App#readme",
   "dependencies": {
     "express": "^5.2.1",
     "nodemon": "^3.1.14"
