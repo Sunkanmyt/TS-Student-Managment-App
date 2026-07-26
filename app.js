@@ -1,9 +1,24 @@
 const express = require("express");
-const app = express();
-const PORT = 3000;
+const { connectToDb, getDb } = require("./db.js");
+const { ObjectId } = require("mongodb");
 
-// Middleware
+// Initialize app and middleware
+const app = express();
 app.use(express.json());
+
+// Connect to Database
+const PORT = 3000;
+let db;
+
+connectToDb((err) => {
+  if (!err) {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+
+    db = getDb();
+  }
+});
 
 // In memory database, basically a JS Array
 students = [
@@ -11,6 +26,43 @@ students = [
   { id: 2, name: "Matthew Bankole", age: 17, present: false },
   { id: 3, name: "Olasunkanmi Oguntoyinbo", age: 4, present: true },
 ];
+
+//Get books
+app.get("/books", async (req, res) => {
+  try {
+    const books = await db.collection("books").find().toArray();
+    if (!books) {
+      res.status(404).json({ msg: "No books found" });
+    }
+
+    res.status(200).json(books);
+  } catch (err) {
+    res.status(500).json({ msg: "Could not fetch documents" });
+  }
+});
+
+// Get book
+app.get("/books/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ msg: "Invalid doc Id" });
+    }
+
+    const book = await db
+      .collection("books")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!book) {
+      return res.status(404).json({ msg: "Book not found" });
+    }
+
+    res.status(200).json(book);
+  } catch (err) {
+    res.status(500).json({ error: "Could not fetch documents" });
+  }
+});
 
 // Add Student
 app.post("/students", (req, res) => {
@@ -84,9 +136,4 @@ app.delete("/students/:id", (req, res) => {
 
   const [deletedStudent] = students.splice(studentIndex, 1);
   res.json(deletedStudent);
-});
-
-// Port configuration
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
 });

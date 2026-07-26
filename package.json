@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Sunkanmyt/TS-Student-Managment-App#readme",
   "dependencies": {
     "express": "^5.2.1",
+    "mongodb": "^7.5.0",
     "nodemon": "^3.1.14"
   }
 }
